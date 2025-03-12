@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>AngelicaDollendoAct5</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .slideshow-container {
+            width: 90%;
+            max-width: 1600px;
+            position: relative;
+            margin: auto;
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .mySlides {
+            display: none;
+            position: relative;
+            width: 100%;
+        }
+
+        .mySlides img {
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+        }
+
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 32px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            user-select: none;
+            z-index: 10;
+            transition: background-color 0.3s;
+        }
+
+        .next {
+            right: 20px;
+        }
+
+        .prev {
+            left: 20px;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .circle-container {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+
+        .circle {
+            width: 14px;
+            height: 14px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .circle.active {
+            background-color: white;
+            transform: scale(1.3);
+        }
+
+        .fade {
+            animation: fade 1.5s;
+        }
+
+        @keyframes fade {
+            from { opacity: 0.4; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .prev, .next {
+                font-size: 24px;
+                padding: 12px;
+            }
+
+            .circle {
+                width: 12px;
+                height: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="slideshow-container" id="slideshow-container">
+    <!-- Slides will be dynamically inserted here -->
+</div>
+
+<script>
+    const imageUrls = [
+        "https://www.littledogsocialmedia.com/wp-content/uploads/2019/05/Winter_2024_Little_Dog_Website_Sliders-1.jpg",
+        "https://www.littledogsocialmedia.com/wp-content/uploads/2019/05/Team_Collage_Slider.jpg",
+        "https://www.littledogsocialmedia.com/wp-content/uploads/2019/05/3-4.png",
+        "https://www.littledogsocialmedia.com/wp-content/uploads/2019/05/4-4.png"
+    ];
+
+    let currentIndex = 0;
+
+    function createSlides() {
+        const container = document.getElementById('slideshow-container');
+        container.innerHTML = '';
+
+        // Create slides
+        imageUrls.forEach((url, index) => {
+            const slide = document.createElement('div');
+            slide.classList.add('mySlides', 'fade');
+
+            const img = document.createElement('img');
+            img.src = url;
+
+            slide.appendChild(img);
+            container.appendChild(slide);
+        });
+
+        // Create prev and next buttons
+        const prev = document.createElement('a');
+        prev.classList.add('prev');
+        prev.innerHTML = "&#10094;";
+        prev.onclick = () => changeSlide(-1);
+
+        const next = document.createElement('a');
+        next.classList.add('next');
+        next.innerHTML = "&#10095;";
+        next.onclick = () => changeSlide(1);
+
+        container.appendChild(prev);
+        container.appendChild(next);
+
+        // Create circle indicators
+        const circleContainer = document.createElement('div');
+        circleContainer.classList.add('circle-container');
+        imageUrls.forEach((_, index) => {
+            const circle = document.createElement('div');
+            circle.classList.add('circle');
+            circle.dataset.index = index;
+            circle.onclick = () => goToSlide(index);
+            circleContainer.appendChild(circle);
+        });
+
+        container.appendChild(circleContainer);
+
+        showSlide(currentIndex);
+    }
+
+    function showSlide(index) {
+        const slides = document.querySelectorAll('.mySlides');
+        const circles = document.querySelectorAll('.circle');
+
+        if (index >= slides.length) currentIndex = 0;
+        if (index < 0) currentIndex = slides.length - 1;
+
+        slides.forEach((slide, i) => {
+            slide.style.display = i === currentIndex ? 'block' : 'none';
+        });
+
+        circles.forEach((circle, i) => {
+            circle.classList.toggle('active', i === currentIndex);
+        });
+    }
+
+    function changeSlide(direction) {
+        currentIndex += direction;
+        showSlide(currentIndex);
+    }
+
+    function goToSlide(index) {
+        currentIndex = index;
+        showSlide(currentIndex);
+    }
+
+    // Auto-slide every 5 seconds
+    setInterval(() => changeSlide(1), 5000);
+
+    // Initialize the slideshow
+    createSlides();
+</script>
+
+</body>
+</html>
